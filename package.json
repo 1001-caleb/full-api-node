@@ -1,0 +1,11 @@
+{
+  "name": "full-api-node",
+  "version": "0.1.0",
+  "description": "full api con node js",
+  "main": "src/index.js",
+  "scripts": {
+    "service": "node src/index.js"
+  },
+  "author": "1001-caleb",
+  "license": "ISC"
+}
