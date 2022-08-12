@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const users = require('../data/user');
 const userRouter = Router();
+const {nanoid} = require('nanoid');
 
 userRouter.route('/user')
     .get((req, res, next) => {
@@ -13,7 +14,7 @@ userRouter.route('/user')
         console.log('req.body', req.body);
         const {body:{name, email, id}} = req;
         users.push({
-            id,
+            id : nanoid(),
             name, 
             email
         })
