@@ -1,3 +1,4 @@
+const {mongo: {dbConnection}} = require('./database');
 const express = require('express');
 const morgan = require('morgan');
 
@@ -11,17 +12,6 @@ app.use(morgan('dev'));
 app.use(userRouter);
 app.use(articleRouter);
 
-const fooMiddleware = (req, res, next) => {
-    console.log('fooMiddleware');
-    next();
-}
-
-
-app.get('/', fooMiddleware, (req, res) => {
-    res.send({
-        message: `hola desde express`
-    })
-})
 
 app.listen(PORT, () =>{
     console.log(`Server running at port: ${PORT}`)
