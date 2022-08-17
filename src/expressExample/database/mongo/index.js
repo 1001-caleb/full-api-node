@@ -1,3 +1,3 @@
-module.export = {
-    dbConnection : require('./connection'),
+module.exports = {
+    dbConnection: require('./connection'),
 }

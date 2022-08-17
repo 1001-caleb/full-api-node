@@ -1,18 +1,33 @@
-const {mongo: {dbConnection}} = require('./database');
-const express = require('express');
-const morgan = require('morgan');
+const express = require('express')
+const morgan = require('morgan')
 
-const {userRouter, articleRouter} = require('./network/routes');
+const { routes: { userRouter } } = require('./network')
+const { mongo: { dbConnection } } = require('./database')
+const response = require('./network/routes/response')
 
-const PORT = process.env.PORT || 3000;
+const { connect } = dbConnection()
 const app = express()
-
-app.use(express.json());
-app.use(morgan('dev'));
-app.use(userRouter);
-app.use(articleRouter);
+const PORT = process.env.PORT
 
 
-app.listen(PORT, () =>{
-    console.log(`Server running at port: ${PORT}`)
-})
+const main = async () => {
+  app.use(express.json())
+  app.use(morgan('dev'))
+  app.use(userRouter)
+
+  app.use((req, res) => {
+    response({
+      message: 'This route does not exists',
+      res,
+      status: 404
+    })
+  })
+
+  await connect()
+
+  app.listen(PORT, () => {
+    console.log(`Server running at port ${PORT}`)
+  })
+}
+
+main()
