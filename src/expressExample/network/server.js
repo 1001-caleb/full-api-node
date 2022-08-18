@@ -1,7 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 
-const {  userRouter  } = require('./routes')
+const {  userRouter, urlRouter  } = require('./routes')
 const { mongo: { dbConnection } } = require('../database')
 const response = require('./routes/response')
 
@@ -25,6 +25,7 @@ class Server {
         this.#app.use(morgan('dev'))
         this.#app.use(express.urlencoded({ extended: false }))
         this.#app.use(userRouter)
+        this.#app.use(urlRouter)
     }
 
     async start() {
@@ -40,8 +41,10 @@ class Server {
 
     async stop() {
         try {
-            await this.#connection.discoonect()
-            this.#server.close()
+            await this.#connection.disconnect()
+            this.#server?.close()
+
+            true ? 1 : 0
         } catch (error) {
             console.error(error)
         }

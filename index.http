@@ -1,4 +1,20 @@
-GET http://localhost:2000/
 
-###
-POST http://localhost:2000/api
+### get all users
+GET http://localhost:2000/user
+
+### save user
+POST http://localhost:2000/user
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "jhon@gmail.com"
+}
+
+### save a url
+POST http://localhost:2000/url
+content-type: application/json
+
+{
+  "link": "http://www.google.com"
+}
