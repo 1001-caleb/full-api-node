@@ -1,4 +1,4 @@
-const { urlModel } = require('../models')
+const { UrlModel } = require('../models')
 
 /**
  *   @param {String} id - id of the user
@@ -7,7 +7,7 @@ const { urlModel } = require('../models')
  */
 
 const saveUrl = async (id, link) => {
-    const url = new urlModel({ id, link })
+    const url = new UrlModel({ id, link })
     await url.save()
     return url
 }
@@ -19,7 +19,7 @@ const saveUrl = async (id, link) => {
  */
 
 const getOneUrl = async (id) => {
-    const urls = urlModel.find({ id })
+    const urls = UrlModel.find({ id })
     return urls[0]
 }
 
