@@ -31,7 +31,7 @@ userRouter.route('/user')
     .post(async (req, res) => {
         try {
             const { body: { name, lastname, email } } = req;
-            await saveUser(nanoid(6), name, lastname, email);
+            await saveUser({id: nanoid(6), name, lastname, email});
 
             response({ error: false, message: await getAllUsers(), res, status: 201 })
         } catch (error) {

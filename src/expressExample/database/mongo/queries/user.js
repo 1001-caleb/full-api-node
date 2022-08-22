@@ -10,9 +10,11 @@ const { UserModel } = require('../models')
  * @returns edit a user
  */
 
-const saveUser = async (id, link) => {
+const saveUser = async user => {
     const savedUser = new UserModel(user)
+
     await savedUser.save()
+
     return savedUser
 }
 
@@ -23,7 +25,7 @@ const saveUser = async (id, link) => {
  */
 
 const getOneUser = async (id) => {
-    const users = UserModel.find({ id })
+    const users = await UserModel.find({ id })
     return users[0]
 }
 
@@ -34,7 +36,7 @@ const getOneUser = async (id) => {
  */
 
 const getAllUsers = async (id) => {
-    const users = UserModel.find({ id })
+    const users = UserModel.find()
     return users
 }
 
@@ -48,6 +50,7 @@ const getAllUsers = async (id) => {
 const removeOneUser = async (id) => {
     const user = await UserModel.findOneAndRemove({ id })
 
+    return user
 }
 
 /**
@@ -60,8 +63,8 @@ const removeOneUser = async (id) => {
  * @returns update a user
  */
 
-const updateOneUser = async (id) => {
-    const {  name, lastname, email } = user
+const updateOneUser = async user => {
+    const { id, name, lastname, email } = user
     const userUpdated = await UserModel.findOneAndUpdate(
         { id },
         { name, lastname, email },

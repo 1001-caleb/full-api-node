@@ -2,13 +2,28 @@
 ### get all users
 GET http://localhost:2000/user
 
+### Get one user
+GET http://localhost:2000/user/Sc0Mk8
+
 ### save user
 POST http://localhost:2000/user
 Content-Type: application/json
 
 {
-  "name": "John Doe",
-  "email": "jhon@gmail.com"
+  "name": "Caleb",
+  "lastname": "Parra",
+  "email": "cp@gmail.com"
+}
+
+### Delete a user by id
+DELETE http://localhost:2000/user/DlPpkr
+
+### Update a user by id
+PATCH http://localhost:2000/user/Sc0Mk8
+Content-Type: application/json
+
+{
+  "email": "c.parra@gmail.com"
 }
 
 ### save a url
