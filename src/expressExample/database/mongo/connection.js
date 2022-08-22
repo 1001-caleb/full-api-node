@@ -27,4 +27,4 @@ const dbConnection = () => {
   }
 }
 
-module.exports = dbConnection
+module.exports =  dbConnection 
