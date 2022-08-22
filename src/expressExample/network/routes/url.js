@@ -27,7 +27,7 @@ urlRouter.route('/url')
 
 urlRouter.route('/url/:id')
     .get(async (req, res) => {
-        const { params: { id, } } = req
+        const { params: { id } } = req
 
         try {
             const url = await getOneUrl(id)
