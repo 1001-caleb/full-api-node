@@ -1,17 +1,19 @@
 const { Router } = require('express')
-const { nanoid } = require('nanoid')
-const { mongo: { queries } } = require('../../database')
+const { UrlService } = require('../../services')
 
 const response = require('./response')
-const { url: { saveUrl, getOneUrl } } = queries
 const urlRouter = Router()
 
-urlRouter.route('/url')
+urlRouter.route('/url/:userId')
     .post(async (req, res) => {
-        const { body: { link } } = req
+        const {
+            body: { link },
+            params: { userId }
+        } = req
+        const urlService = new UrlService({ link, userId })
 
         try {
-            const result = await saveUrl(nanoid(6), link)
+            const result = await urlService.saveUrl()
 
             response({
                 error: false,
@@ -25,18 +27,18 @@ urlRouter.route('/url')
         }
     })
 
-urlRouter.route('/url/:id')
-    .get(async (req, res) => {
-        const { params: { id } } = req
+// urlRouter.route('/url/:id')
+//     .get(async (req, res) => {
+//         const { params: { id } } = req
 
-        try {
-            const url = await getOneUrl(id)
+//         try {
+//             const url = await getOneUrl(id)
 
-            res.redirect(url.link)
-        } catch (error) {
-            console.error(error)
-            response({ message: 'Internal server error', res })
-        }
-    })
+//             res.redirect(url.link)
+//         } catch (error) {
+//             console.error(error)
+//             response({ message: 'Internal server error', res })
+//         }
+//     })
 
 module.exports = urlRouter  

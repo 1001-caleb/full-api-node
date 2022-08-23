@@ -1,15 +1,17 @@
 const { UrlModel } = require('../models')
 
 /**
- *   @param {String} id - id of the user
- *   @param {String} link - link to be saved
+ *   @param {Object} url - id of the user
+ *   @param {String} url.id - link to be saved
+ *   @param {String} link.link
+ *   @param {String} link.userId mongo user id
  *   @returns - the saved url
  */
 
-const saveUrl = async (id, link) => {
-    const url = new UrlModel({ id, link })
-    await url.save()
-    return url
+const saveUrl = async url => {
+    const savedUrl = new UrlModel(url)
+    await savedUrl.save()
+    return savedUrl
 }
 
 /**

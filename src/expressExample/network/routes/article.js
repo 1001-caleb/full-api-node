@@ -2,7 +2,6 @@ const { Router } = require('express');
 const { nanoid } = require('nanoid');
 
 const response = require('./response');
-const articles = require('../../data/article');
 const { userRouter } = require('.');
 
 const articleRouter = Router();

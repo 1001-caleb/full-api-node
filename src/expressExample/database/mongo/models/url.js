@@ -10,6 +10,11 @@ const urlSchema = new Schema(
         link: {
             required: true,
             type: String
+        },
+        userId: {
+            type: Schema.Types.ObjectId,
+            required: true,
+            ref: 'users'
         }
     },
     {
