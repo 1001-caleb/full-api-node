@@ -1,12 +1,12 @@
 
 ### get all users
-GET http://localhost:2000/user
+GET http://localhost:2000/api/user
 
 ### Get one user
-GET http://localhost:2000/user/Sc0Mk8
+GET http://localhost:2000/api/user/Sc0Mk8
 
 ### save user
-POST http://localhost:2000/user
+POST http://localhost:2000/api/user
 Content-Type: application/json
 
 {
@@ -16,10 +16,10 @@ Content-Type: application/json
 }
 
 ### Delete a user by id
-DELETE http://localhost:2000/user/DlPpkr
+DELETE http://localhost:2000/api/user/DlPpkr
 
 ### Update a user by id
-PATCH http://localhost:2000/user/Sc0Mk8
+PATCH http://localhost:2000/api/user/Sc0Mk8
 Content-Type: application/json
 
 {
@@ -27,12 +27,15 @@ Content-Type: application/json
 }
 
 ### save a url
-POST http://localhost:2000/url/Sc0Mk8
+POST http://localhost:2000/api/url/Sc0Mk8
 content-type: application/json
 
 {
-  "link": "http://www.google.com"
+  "link": "http://www.si.com"
 }
 
 ### get one url
-GET http://localhost:2000/url/Sc0Mk8
+GET http://localhost:2000/api/url/Sc0Mk8
+
+### 404 error
+GET http://localhost:2000/api/ruta/no/existe

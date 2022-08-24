@@ -3,7 +3,7 @@ const morgan = require('morgan')
 
 const { userRouter, urlRouter } = require('./routes')
 const { mongo: { dbConnection } } = require('../database')
-
+const applyRoutes = require('./router')
 
 const app = express()
 const PORT = process.env.PORT
@@ -23,8 +23,7 @@ class Server {
         this.#app.use(express.json())
         this.#app.use(morgan('dev'))
         this.#app.use(express.urlencoded({ extended: false }))
-        this.#app.use(userRouter)
-        this.#app.use(urlRouter)
+        applyRoutes(this.#app)
     }
 
     async start() {

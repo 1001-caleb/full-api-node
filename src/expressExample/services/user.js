@@ -1,3 +1,4 @@
+const httperrors = require('http-errors');
 const { mongo: { queries } } = require('../database')
 const { user: { getOneUser } } = queries
 
@@ -17,7 +18,7 @@ class UserService {
 
         const user = await getOneUser(this.#userId)
 
-        if (!user) throw new Error(`User not found`)
+        if (!user) throw new httperrors.NotFound(`User not found`)
 
         return user
     }
