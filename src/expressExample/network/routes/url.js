@@ -27,18 +27,18 @@ urlRouter.route('/url/:userId')
         }
     })
 
-// urlRouter.route('/url/:id')
-//     .get(async (req, res) => {
-//         const { params: { id } } = req
+urlRouter.route('/url/:id')
+    .get(async (req, res, next) => {
+        const { params: { id } } = req
 
-//         try {
-//             const url = await getOneUrl(id)
+        try {
+            const urlService = new UrlService({ id })
+            const url = await urlService.getUrl()
 
-//             res.redirect(url.link)
-//         } catch (error) {
-//             console.error(error)
-//             response({ message: 'Internal server error', res })
-//         }
-//     })
+            res.redirect(url.link)
+        } catch (error) {
+            next(error)
+        }
+    })
 
 module.exports = urlRouter  

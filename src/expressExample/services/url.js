@@ -5,14 +5,20 @@ const { mongo: { queries } } = require('../database')
 const { url: { saveUrl, getOneUrl } } = queries
 
 class UrlService {
+    #id
     #link
     #userId
 
     /**
-     * @param {string} link
-     * @param {string|undefined} userId
+     * @param {Object} args
+     * @param {string|undefined} args.id
+     * @param {string|undefined} args.link
+     * @param {string|undefined} args.userId
     **/
-    constructor(link, userId = '') {
+    constructor(args) {
+        const { id = '', link = '', userId = '' } = args
+
+        this.#id = id
         this.#link = link
         this.#userId = userId
     }
@@ -31,6 +37,18 @@ class UrlService {
         })
 
         return newUrl.toObject()
+    }
+
+    async getUrl() {
+        if (!this.#id)
+            throw new Error('Missing required field: id')
+
+        const foundUrl = await getOneUrl(this.#id)
+
+        if (!foundUrl)
+            throw new Error('Url not found')
+
+        return foundUrl
     }
 }
 

@@ -33,3 +33,6 @@ content-type: application/json
 {
   "link": "http://www.google.com"
 }
+
+### get one url
+GET http://localhost:2000/url/Sc0Mk8

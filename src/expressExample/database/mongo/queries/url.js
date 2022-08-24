@@ -3,8 +3,8 @@ const { UrlModel } = require('../models')
 /**
  *   @param {Object} url - id of the user
  *   @param {String} url.id - link to be saved
- *   @param {String} link.link
- *   @param {String} link.userId mongo user id
+ *   @param {String} url.link
+ *   @param {String} url.userId mongo user id
  *   @returns - the saved url
  */
 
@@ -21,7 +21,8 @@ const saveUrl = async url => {
  */
 
 const getOneUrl = async (id) => {
-    const urls = UrlModel.find({ id })
+    const urls = UrlModel.find({ id }).populate('userId')
+    
     return urls[0]
 }
 
