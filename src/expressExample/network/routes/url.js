@@ -5,7 +5,7 @@ const response = require('./response')
 const urlRouter = Router()
 
 urlRouter.route('/url/:userId')
-    .post(async (req, res) => {
+    .post(async (req, res, next) => {
         const {
             body: { link },
             params: { userId }
@@ -22,8 +22,7 @@ urlRouter.route('/url/:userId')
                 status: 201
             })
         } catch (error) {
-            console.error(error)
-            response({ message: 'Internal server error', res })
+            next(error)
         }
     })
 

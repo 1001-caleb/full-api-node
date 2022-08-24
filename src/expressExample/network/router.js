@@ -16,6 +16,7 @@ const applyRoutes = (app) => {
     })
 
     app.use((error, req, res, next) => {
+        console.error('error', error)
         response({
             message: error.message || 'Internal server error',
             res,

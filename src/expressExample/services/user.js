@@ -14,7 +14,7 @@ class UserService {
 
     async verifyUserExists() {
         if (!this.#userId)
-            throw new Error(`Missing userId`)
+            throw new  httperrors.BadRequest(`Missing userId`)
 
         const user = await getOneUser(this.#userId)
 
