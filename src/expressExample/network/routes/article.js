@@ -2,67 +2,73 @@ const { Router } = require('express');
 const { nanoid } = require('nanoid');
 
 const response = require('./response');
-const { userRouter } = require('.');
+const { mongo: { queries } } = require('../../database');
 
 const articleRouter = Router();
+const {
+    article: {
+        saveArticle,
+        getAllArticles,
+        getOneArticle,
+        removeOneArticle,
+        updateOneArticle
+    }
+} = queries;
 
 articleRouter.route('/article')
-    .get((req, res, next) => {
-        response({ error: false, message: articles, res, status: 200 })
+    .get(async (req, res, next) => {
+        try {
+            const articles = await getAllArticles();
+            response({ error: false, message: articles, res, status: 200 });
+        } catch (error) {
+            next(error)
+        }
     })
 
-    .post((req, res) => {
-        const { body: { name, price, description, image, id } } = req;
+    .post(async (req, res, next) => {
+        try {
+            const { body: { name, price, description, image } } = req;
 
-        articles.push({
-            id: nanoid(),
-            name,
-            price,
-            description,
-            image
-        })
-
-        response({ error: false, message: articles, res, status: 201 })
+            await saveArticle({ id: nanoid(6), name, price, description, image });
+            response({ error: false, message: getAllArticles(), res, status: 200 });
+        } catch (error) {
+            next(error)
+        }
     })
-
 
 articleRouter.route('/article/:id')
-    .delete((req, res) => {
-        const { params: { id } } = req;
+    .get(async (req, res, next) => {
+        try {
+            const { params: { id } } = req
+            const article = await getOneArticle(id)
 
-        const articleIndex = articles.findIndex(article => article.id === id);
-
-        if (articleIndex === -1)
-            return response({
-                message: 'Article not found',
-                res,
-                status: 404
-            })
-        user.splice(articleIndex, 1)
-        response({ error: false, message: articles, res, status: 200 })
+            response({ error: false, message: article, res, status: 200 });
+        } catch (error) {
+            next(error)
+        }
     })
 
-    .patch((req, res) => {
-        const {
-            body: {name, price, description, image},
-            params: {id}
-        } = req;
+    .delete(async (req, res, next) => {
+        try {
+            const { params: { id } } = req
 
-        const articleIndex = articles.findIndex(article => article.id === id);
+            await removeOneArticle(id)
 
-        if(articleIndex === -1)
-            return response({
-                message: 'Article not found',
-                res,
-                status: 404
-            })
-        articles.splice(articleIndex, 1, {
-            ...articles[articleIndex],
-            ...(name && {name}),
-            ...(price && {price}),
-            ...(description && {description}),
-            ...(image && {image})
-        })
-        response({ error: false, message: articles, res, status: 200 })
+            response({ error: false, message: getAllArticles(), res, status: 200 });
+        } catch (error) {
+            next(error)
+        }
     })
+
+    .patch(async (req, res, next) => {
+        const { body: { name, price, description, image }, params: { id } } = req
+        try {
+            await updateOneArticle(id, { name, price, description, image })
+
+            response({ error: false, message: getAllArticles(), res, status: 200 })
+        } catch (error) {
+            next(error)
+        }
+    })
+
 module.exports = articleRouter;    
