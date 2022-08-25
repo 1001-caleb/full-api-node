@@ -1,6 +1,6 @@
 const { model, Schema } = require('mongoose')
 
-const ArticleSchema = new Schema = (
+const ArticleSchema = new Schema(
     {
         id: {
             required: true,

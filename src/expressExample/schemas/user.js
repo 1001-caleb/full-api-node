@@ -8,7 +8,7 @@ const StoreuserSchema = Type.Object({
     })
 })
 
-const UpdateUserSchema = Type.OptionalType.Object({
+const UpdateUserSchema = Type.Object({
     name: Type.Optional(Type.String({ minLength: 2 })),
     lastname: Type.Optional(Type.String({ minLength: 2 })),
     email: Type.Optional(Type.String({

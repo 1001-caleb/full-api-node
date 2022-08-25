@@ -37,5 +37,8 @@ content-type: application/json
 ### get one url
 GET http://localhost:2000/api/url/Sc0Mk8
 
+### get all articles
+GET http://localhost:2000/api/article
+
 ### 404 error
 GET http://localhost:2000/api/ruta/no/existe
