@@ -35,7 +35,7 @@ const getOneUser = async (id) => {
  * @returns found all users
  */
 
-const getAllUsers = async (id) => {
+const getAllUsers = async => {
     const users = UserModel.find()
     return users
 }
