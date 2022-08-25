@@ -40,5 +40,31 @@ GET http://localhost:2000/api/url/Sc0Mk8
 ### get all articles
 GET http://localhost:2000/api/article
 
+### save a article
+POST http://localhost:2000/api/article
+
+Content-Type: application/json
+
+{
+  "name": "portatil",
+  "price": "200",
+  "description": "portatil de escritorio",
+  "image": "http://www.si.com/portatil.jpg"
+}
+
+### get one article
+GET http://localhost:2000/api/article/123456
+
+### edit an article
+PATCH http://localhost:2000/api/article/123456
+Content-Type: application/json
+
+{
+  "name": "portatil",
+  "price": "200",
+  "description": "portatil de escritorio",
+  "image": "http://www.si.com/portatil.jpg"
+}
+
 ### 404 error
 GET http://localhost:2000/api/ruta/no/existe

@@ -7,7 +7,7 @@ const { UserModel } = require('../models')
  * @param {String} user.name
  * @param {String} user.lastname
  * @param {String} user.email
- * @returns edit a user
+ * @returns save a user
  */
 
 const saveUser = async user => {

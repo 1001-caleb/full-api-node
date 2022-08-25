@@ -15,7 +15,7 @@ const ArticleSchema = new Schema(
         },
         price: {
             required: true,
-            type: Number
+            type: String
         },
         description: {
             required: true,

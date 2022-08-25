@@ -7,7 +7,7 @@ const { ArticleModel } = require('../models')
  * @param {String} article.price
  * @param {String} article.description
  * @param {String} article.image
- * @returns save a artcile
+ * @returns save a article
  */
 const saveArticle = async article => {
     const savedArticle = new ArticleModel(article)
