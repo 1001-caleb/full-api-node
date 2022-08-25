@@ -3,20 +3,20 @@
 GET http://localhost:2000/api/user
 
 ### Get one user
-GET http://localhost:2000/api/user/Sc0Mk8
+GET http://localhost:2000/api/user/5yCQVk
 
 ### save user
 POST http://localhost:2000/api/user
 Content-Type: application/json
 
 {
-  "name": "Caleb",
-  "lastname": "Parra",
-  "email": "cp@gmail.com"
+  "name": "Carlo",
+  "lastname": "Par",
+  "email": "c.par@gmail.com"
 }
 
 ### Delete a user by id
-DELETE http://localhost:2000/api/user/DlPpkr
+DELETE http://localhost:2000/api/user/_lJmOM
 
 ### Update a user by id
 PATCH http://localhost:2000/api/user/Sc0Mk8
