@@ -29,7 +29,7 @@ class UserService {
   }
 
   async verifyUserExists () {
-    if (!this.#userId) { throw new httperrors.BadRequest('Missing userId') }
+    if (!this.#userId) throw new httperrors.BadRequest('Missing userId')
 
     const user = await getOneUser(this.#userId)
 
@@ -39,13 +39,13 @@ class UserService {
   }
 
   async saveUser () {
-    if (this.#name) { throw new httperrors.BadRequest('Missing name') }
+    if (!this.#name) { throw new httperrors.BadRequest('Missing name') }
 
-    if (this.#lastname) { throw new httperrors.BadRequest('Missing lastname') }
+    if (!this.#lastname) { throw new httperrors.BadRequest('Missing lastname') }
 
-    if (this.#email) { throw new httperrors.BadRequest('Missing email') }
+    if (!this.#email) { throw new httperrors.BadRequest('Missing email') }
 
-    if (this.#password) { throw new httperrors.BadRequest('Missing password') }
+    if (!this.#password) { throw new httperrors.BadRequest('Missing password') }
 
     const { salt, result: hash } = hashString(this.#password)
 
@@ -87,12 +87,40 @@ class UserService {
   async updateOneUser () {
     if (!this.#userId) { throw new httperrors.BadRequest('Missing userId') }
 
+    const updatePassword = !!this.#password
+    const aux = {}
+
+    if (updatePassword) {
+      const { salt, result: hash } = hashString(this.#password)
+
+      aux.salt = salt
+      aux.hash = hash
+    }
+
     return await updateOneUser({
       id: this.#userId,
       name: this.#name,
       lastname: this.#lastname,
-      email: this.#email
+      email: this.#email,
+      ...aux
     })
+  }
+
+  async login () {
+    if (!this.#email) { throw new httperrors.BadRequest('Missing email') }
+
+    if (!this.#password) throw new httperrors.BadRequest('Missing password')
+
+    const user = await getOneUser({ email: this.#email })
+
+    if (!user) throw new httperrors.BadRequest('Bad credentials')
+
+    const { salt, hash } = user
+    const { result } = hashString(this.#password, salt)
+
+    if (hash !== result) throw new httperrors.BadRequest('Bad credentials')
+
+    return true
   }
 }
 

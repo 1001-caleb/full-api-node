@@ -11,6 +11,11 @@ const StoreuserSchema = Type.Object({
 
 const UpdateUserSchema = Type.Partial(StoreuserSchema)
 
+const userLoginSchema = Type.Object({
+  email: Type.String({ format: 'email' }),
+  password: Type.String({ minLength: 8 })
+})
+
 const userIdSchema = Type.Object({
   id: Type.String({ minLength: 6, maxLength: 6 })
 })
@@ -18,5 +23,6 @@ const userIdSchema = Type.Object({
 module.exports = {
   userIdSchema,
   StoreuserSchema,
-  UpdateUserSchema
+  UpdateUserSchema,
+  userLoginSchema
 }

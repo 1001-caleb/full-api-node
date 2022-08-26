@@ -74,11 +74,26 @@ const updateOneUser = async user => {
       ...(name && { name }),
       ...(lastname && { lastname }),
       ...(email && { email }),
-      ...(salt && hash && { salt, hash })
+      ...(salt &&
+        hash && {
+        salt,
+        hash
+      })
     },
     { new: true }
   )
   return userUpdated
+}
+
+/**
+ * It returns the first user in the database that matches the query
+ * @param {Object} query - The query object that will be used to find the user.
+ * @returns The first user in the database
+ */
+const getUser = async (query = {}) => {
+  const users = await UserModel.find(query)
+
+  return users[0]
 }
 
 module.exports = {
@@ -86,5 +101,6 @@ module.exports = {
   getOneUser,
   removeOneUser,
   getAllUsers,
-  updateOneUser
+  updateOneUser,
+  getUser
 }

@@ -6,24 +6,25 @@ GET http://localhost:2000/api/user
 GET http://localhost:2000/api/user/5yCQVk
 
 ### save user
-POST http://localhost:2000/api/user
+POST http://localhost:2000/api/user/signup
 Content-Type: application/json
 
 {
-  "name": "Prueba",
+  "name": "pruebita",
   "lastname": "prueba",
-  "email": "prueba@gmail.com"
+  "email": "prueba@gmail.com",
+  "password": "12345678"
 }
 
 ### Delete a user by id
-DELETE http://localhost:2000/api/user/_lJmOM
+DELETE http://localhost:2000/api/user/D1YxDS
 
 ### Update a user by id
 PATCH http://localhost:2000/api/user/Sc0Mk8
 Content-Type: application/json
 
 {
-  "email": "c.parra@gmail.com"
+  "email": "c.parra.edit@gmail.com"
 }
 
 ### save a url

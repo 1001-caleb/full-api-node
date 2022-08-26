@@ -4,7 +4,8 @@ const {
   user: {
     StoreuserSchema,
     userIdSchema,
-    UpdateUserSchema
+    UpdateUserSchema,
+    userLoginSchema
   }
 } = require('../../schemas')
 const { validatorCompiler } = require('./utils')
@@ -23,17 +24,43 @@ userRouter.route('/user')
     }
   })
 
-  .post(
-    validatorCompiler(StoreuserSchema, 'body'),
+userRouter.route('/user/signup').post(
+  validatorCompiler(StoreuserSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const {
+        body: { name, lastname, email, password }
+      } = req
+
+      response({
+        error: false,
+        message: await new UserService({
+          name,
+          lastname,
+          email,
+          password
+        }).saveUser(),
+        res,
+        status: 201
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+)
+
+userRouter.route('/user/login')
+  .post(validatorCompiler(userLoginSchema, 'body'),
     async (req, res, next) => {
       try {
-        const { body: { name, lastname, email } } = req
+        const { body: { email, password } } = req
 
-        response({ error: false, message: await new UserService({ name, lastname, email }), res, status: 201 })
+        response({ error: false, message: await new UserService({ email, password }).login(), res, status: 200 })
       } catch (error) {
         next(error)
       }
-    })
+    }
+  )
 
 userRouter.route('/user/:id')
   .get(

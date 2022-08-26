@@ -1,11 +1,9 @@
 const express = require('express')
 const morgan = require('morgan')
 
-const { userRouter, urlRouter } = require('./routes')
 const { mongo: { dbConnection } } = require('../database')
 const applyRoutes = require('./router')
 
-const app = express()
 const PORT = process.env.PORT
 
 class Server {
@@ -41,8 +39,6 @@ class Server {
     try {
       await this.#connection.disconnect()
       this.#server?.close()
-
-      true ? 1 : 0
     } catch (error) {
       console.error(error)
     }
