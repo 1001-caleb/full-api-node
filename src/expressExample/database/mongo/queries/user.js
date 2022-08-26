@@ -7,6 +7,8 @@ const { UserModel } = require('../models')
  * @param {String} user.name
  * @param {String} user.lastname
  * @param {String} user.email
+ * @param {String} user.salt
+ * @param {String} user.hash
  * @returns save a user
  */
 
@@ -59,17 +61,20 @@ const removeOneUser = async (id) => {
  * @param {String|undefined} user.name
  * @param {String|undefined} user.lastname
  * @param {String|undefined} user.email
+ * @param {String|undefined} user.salt
+ * @param {String|undefined} user.hash
  * @returns update a user
  */
 
 const updateOneUser = async user => {
-  const { id, name, lastname, email } = user
+  const { id, name, lastname, email, salt, hash } = user
   const userUpdated = await UserModel.findOneAndUpdate(
     { id },
     {
       ...(name && { name }),
       ...(lastname && { lastname }),
-      ...(email && { email })
+      ...(email && { email }),
+      ...(salt && hash && { salt, hash })
     },
     { new: true }
   )

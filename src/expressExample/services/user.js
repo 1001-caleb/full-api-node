@@ -1,5 +1,6 @@
 const httperrors = require('http-errors')
 const { mongo: { queries } } = require('../database')
+const { hash: { hashString } } = require('../utils')
 const { user: { getOneUser, saveUser, getAllUsers, removeOneUser, updateOneUser } } = queries
 const { nanoid } = require('nanoid')
 class UserService {
@@ -7,6 +8,7 @@ class UserService {
   #name
   #lastname
   #email
+  #password
 
   /**
      * @param {Object} args
@@ -14,14 +16,16 @@ class UserService {
      * @param {string} args.name
      * @param {string} args.lastname
      * @param {string} args.email
+     * @param {string} args.password
     **/
-  constructor (args) {
-    const { userId = '', name = '', lastname = '', email = '' } = args
+  constructor (args = {}) {
+    const { userId = '', name = '', lastname = '', email = '', password = '' } = args
 
     this.#userId = userId
     this.#name = name
     this.#lastname = lastname
     this.#email = email
+    this.#password = password
   }
 
   async verifyUserExists () {
@@ -41,11 +45,17 @@ class UserService {
 
     if (this.#email) { throw new httperrors.BadRequest('Missing email') }
 
+    if (this.#password) { throw new httperrors.BadRequest('Missing password') }
+
+    const { salt, result: hash } = hashString(this.#password)
+
     await saveUser({
       id: nanoid(6),
       name: this.#name,
       lastname: this.#lastname,
-      email: this.#email
+      email: this.#email,
+      salt,
+      hash
     })
 
     return await getAllUsers()

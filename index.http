@@ -10,9 +10,9 @@ POST http://localhost:2000/api/user
 Content-Type: application/json
 
 {
-  "name": "Carlo",
-  "lastname": "Par",
-  "email": "c.par@gmail.com"
+  "name": "Prueba",
+  "lastname": "prueba",
+  "email": "prueba@gmail.com"
 }
 
 ### Delete a user by id
