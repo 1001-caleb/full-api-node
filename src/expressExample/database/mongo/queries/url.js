@@ -9,24 +9,24 @@ const { UrlModel } = require('../models')
  */
 
 const saveUrl = async url => {
-    const savedUrl = new UrlModel(url)
-    await savedUrl.save()
-    return savedUrl
+  const savedUrl = new UrlModel(url)
+  await savedUrl.save()
+  return savedUrl
 }
 
 /**
- * 
- * @param {String} id 
+ *
+ * @param {String} id
  * @returns found url
  */
 
 const getOneUrl = async (id) => {
-    const urls = UrlModel.find({ id }).populate('userId')
-    
-    return urls[0]
+  const urls = UrlModel.find({ id }).populate('userId')
+
+  return urls[0]
 }
 
 module.exports = {
-    saveUrl,
-    getOneUrl
+  saveUrl,
+  getOneUrl
 }

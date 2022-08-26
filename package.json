@@ -6,12 +6,18 @@
   "scripts": {
     "service": "nodemon -r dotenv/config src/index.js",
     "express": "nodemon -r dotenv/config src/expressExample/index.js",
-    "http": "nodemon -r dotenv/config src/httpExample/index.js"
+    "http": "nodemon -r dotenv/config src/httpExample/index.js",
+    "lint": "npx eslint --fix ./src/expressExample"
   },
   "author": "1001-caleb",
   "license": "ISC",
   "devDependencies": {
     "dotenv": "^16.0.1",
+    "eslint": "^8.22.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.5",
+    "eslint-plugin-promise": "^6.0.1",
     "nodemon": "^2.0.19"
   },
   "dependencies": {

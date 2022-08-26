@@ -1,4 +1,4 @@
-const httperrors = require('http-errors');
+const httperrors = require('http-errors')
 const { nanoid } = require('nanoid')
 
 const UserService = require('./user')
@@ -6,51 +6,48 @@ const { mongo: { queries } } = require('../database')
 const { url: { saveUrl, getOneUrl } } = queries
 
 class UrlService {
-    #id
-    #link
-    #userId
+  #id
+  #link
+  #userId
 
-    /**
+  /**
      * @param {Object} args
      * @param {string|undefined} args.id
      * @param {string|undefined} args.link
      * @param {string|undefined} args.userId
     **/
-    constructor(args) {
-        const { id = '', link = '', userId = '' } = args
+  constructor (args) {
+    const { id = '', link = '', userId = '' } = args
 
-        this.#id = id
-        this.#link = link
-        this.#userId = userId
-    }
+    this.#id = id
+    this.#link = link
+    this.#userId = userId
+  }
 
-    async saveUrl() {
-        if (!this.#userId)
-            throw new httperrors.BadRequest('Missing required field: userId')
+  async saveUrl () {
+    if (!this.#userId) { throw new httperrors.BadRequest('Missing required field: userId') }
 
-        const userService = new UserService(this.#userId)
-        const foundUser = await userService.verifyUserExists()
+    const userService = new UserService(this.#userId)
+    const foundUser = await userService.verifyUserExists()
 
-        const newUrl = await saveUrl({
-            id: nanoid(6),
-            link: this.#link,
-            userId: foundUser._id // mongo user id
-        })
+    const newUrl = await saveUrl({
+      id: nanoid(6),
+      link: this.#link,
+      userId: foundUser._id // mongo user id
+    })
 
-        return newUrl.toObject()
-    }
+    return newUrl.toObject()
+  }
 
-    async getUrl() {
-        if (!this.#id)
-            throw new httperrors.BadRequest('Missing required field: id')
+  async getUrl () {
+    if (!this.#id) { throw new httperrors.BadRequest('Missing required field: id') }
 
-        const foundUrl = await getOneUrl(this.#id)
+    const foundUrl = await getOneUrl(this.#id)
 
-        if (!foundUrl)
-            throw new httperrors.NotFound('Url not found')
+    if (!foundUrl) { throw new httperrors.NotFound('Url not found') }
 
-        return foundUrl
-    }
+    return foundUrl
+  }
 }
 
-module.exports = UrlService;
+module.exports = UrlService

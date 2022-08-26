@@ -1,5 +1,5 @@
 module.exports = {
-    user: require('./user'),
-    url: require('./url'),
-    article: require('./article')
+  user: require('./user'),
+  url: require('./url'),
+  article: require('./article')
 }
