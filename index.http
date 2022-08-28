@@ -3,7 +3,7 @@
 GET http://localhost:2000/api/user
 
 ### Get one user
-GET http://localhost:2000/api/user/5yCQVk
+GET http://localhost:2000/api/user/EZK6Mv
 
 ### save user
 POST http://localhost:2000/api/user/signup
@@ -14,6 +14,15 @@ Content-Type: application/json
   "lastname": "prueba",
   "email": "prueba@gmail.com",
   "password": "12345678"
+}
+
+### Login
+POST http://localhost:2000/api/user/login
+Content-Type: application/json
+
+{
+  "email": "prueba@gmail.com",
+  "password": "7Gmi1K7hRJRgCM7x2qIxn40szz2U9h"
 }
 
 ### Delete a user by id
@@ -28,7 +37,7 @@ Content-Type: application/json
 }
 
 ### save a url
-POST http://localhost:2000/api/url/Sc0Mk8
+POST http://localhost:2000/api/url/630bca80a854af68b42fdc38
 content-type: application/json
 
 {

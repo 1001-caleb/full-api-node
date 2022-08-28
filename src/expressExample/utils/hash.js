@@ -17,7 +17,7 @@ const hashString = (string, salt = '') => {
 
   const result = hash.digest('hex')
 
-  return { salt, result }
+  return { salt: newSalt, result }
 }
 
 module.exports = { hashString }

@@ -107,9 +107,9 @@ class UserService {
   }
 
   async login () {
-    if (!this.#email) { throw new httperrors.BadRequest('Missing email') }
+    if (!this.#email) { throw new httperrors.BadRequest('Missing required field: email') }
 
-    if (!this.#password) throw new httperrors.BadRequest('Missing password')
+    if (!this.#password) { throw new httperrors.BadRequest('Missing required field: password') }
 
     const user = await getOneUser({ email: this.#email })
 
