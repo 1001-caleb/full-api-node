@@ -9,6 +9,7 @@ const { UserModel } = require('../models')
  * @param {String} user.email
  * @param {String} user.salt
  * @param {String} user.hash
+ * @param {import('mongoose').Schema.Types.ObjectId} user.role
  * @returns save a user
  */
 

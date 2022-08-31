@@ -1,7 +1,7 @@
 const httperrors = require('http-errors')
 
-const { userRouter, urlRouter, articleRouter, response } = require('./routes')
-const routers = [userRouter, urlRouter, articleRouter]
+const { userRouter, urlRouter, articleRouter, roleRouter, response } = require('./routes')
+const routers = [userRouter, urlRouter, roleRouter, articleRouter]
 
 /**
  * @param {import('express').Express} app
