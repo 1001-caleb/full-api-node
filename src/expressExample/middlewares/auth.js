@@ -25,7 +25,7 @@ function verifyToken (token) {
 const isAdmin = async (req, res, next) => {
   try {
     const user = await UserModel.findById(req.userId)
-    const roles = await RoleModel.find({ _id: { $in: user.roles } })
+    const roles = await RoleModel.find({ _id: { $in: user.role } })
 
     for (let i = 0; i < roles.length; i++) {
       if (roles[i].name === 'admin') {
