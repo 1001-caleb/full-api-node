@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const jwt = require('jsonwebtoken')
-const { isAuthenticated } = require('../../middlewares')
+const { isAuthenticated, isAdmin } = require('../../middlewares')
 
 const {
   user: { StoreuserSchema, userIdSchema, UpdateUserSchema, userLoginSchema }
@@ -95,6 +95,7 @@ userRouter.route('/user/:id')
 
   .delete(
     isAuthenticated,
+    isAdmin,
     validatorCompiler(userIdSchema, 'params'),
     async (req, res, next) => {
       try {

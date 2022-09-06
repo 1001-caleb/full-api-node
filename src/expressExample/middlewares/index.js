@@ -1,3 +1,3 @@
 module.exports = {
-  isAuthenticated: require('../auth')
+  isAuthenticated: require('./auth')
 }
