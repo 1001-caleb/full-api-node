@@ -5,7 +5,7 @@ const { isAuthenticated, isAdmin } = require('../../middlewares')
 const {
   user: { StoreuserSchema, userIdSchema, UpdateUserSchema, userLoginSchema }
 } = require('../../schemas')
-const { validatorCompiler } = require('./utils')
+const { validatorCompiler, auth } = require('./utils')
 const { UserService } = require('../../services')
 const response = require('./response')
 
@@ -49,28 +49,28 @@ userRouter.route('/user/signup').post(
 
 userRouter.route('/user/login').post(
   validatorCompiler(userLoginSchema, 'body'),
+  auth.generateToken(),
   async (req, res, next) => {
     try {
       const {
+        accesToken,
+        refreshToken,
         body: { email, password }
       } = req
 
-      const payload = { email, password }
-      const token = jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: '2min'
-      })
+      const isLoginCorrect = await new UserService({ email, password }).loginUser()
 
-      console.log('token', token)
-
-      response({
-        error: false,
-        message: await new UserService({
-          email,
-          password
-        }).login(),
-        res,
-        status: 200
-      })
+      if (isLoginCorrect) {
+        response({
+          error: false,
+          message: {
+            accesToken,
+            refreshToken
+          },
+          res,
+          status: 200
+        })
+      }
     } catch (error) {
       next(error)
     }
