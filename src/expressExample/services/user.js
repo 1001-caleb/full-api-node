@@ -3,12 +3,14 @@ const { mongo: { queries } } = require('../database')
 const { hash: { hashString } } = require('../utils')
 const { user: { getOneUser, saveUser, getAllUsers, removeOneUser, updateOneUser } } = queries
 const { nanoid } = require('nanoid')
+const RoleService = require('./role')
 class UserService {
   #userId
   #name
   #lastname
   #email
   #password
+  #role
 
   /**
      * @param {Object} args
@@ -17,15 +19,17 @@ class UserService {
      * @param {string} args.lastname
      * @param {string} args.email
      * @param {string} args.password
+     * @param {String} args.role
     **/
   constructor (args = {}) {
-    const { userId = '', name = '', lastname = '', email = '', password = '' } = args
+    const { userId = '', name = '', lastname = '', email = '', password = '', role = '2' } = args
 
     this.#userId = userId
     this.#name = name
     this.#lastname = lastname
     this.#email = email
     this.#password = password
+    this.#role = role
   }
 
   async verifyUserExists () {
@@ -47,7 +51,10 @@ class UserService {
 
     if (!this.#password) { throw new httperrors.BadRequest('Missing password') }
 
+    if (!this.#role) { throw new httperrors.BadRequest('Missing required field: role') }
+
     const { salt, result: hash } = hashString(this.#password)
+    const role = await new RoleService({ id: this.#role }).getRoleByID()
 
     await saveUser({
       id: nanoid(6),
@@ -55,7 +62,8 @@ class UserService {
       lastname: this.#lastname,
       email: this.#email,
       salt,
-      hash
+      hash,
+      role: role._id
     })
 
     return await getAllUsers()
@@ -120,7 +128,7 @@ class UserService {
 
     if (hash !== result) throw new httperrors.BadRequest('Bad credentials')
 
-    return true
+    return user
   }
 }
 

@@ -1,40 +1,43 @@
 const { Router } = require('express')
-const jwt = require('jsonwebtoken')
-const { isAuthenticated, isAdmin } = require('../../middlewares')
+const httpErrors = require('http-errors')
 
 const {
-  user: { StoreuserSchema, userIdSchema, UpdateUserSchema, userLoginSchema }
+  user: { storeUserSchema, updateUserSchema, userIDSchema, userLoginSchema }
 } = require('../../schemas')
-const { validatorCompiler, auth } = require('./utils')
-const { UserService } = require('../../services')
+const { auth, validatorCompiler } = require('./utils')
 const response = require('./response')
+const { UserService } = require('../../services')
 
-const userRouter = Router()
+const UserRouter = Router()
 
-userRouter.route('/user').get(
-  async (req, res, next) => {
-    try {
-      const userService = new UserService()
-      response({ error: false, message: await userService.getAllUsers(), res, status: 200 })
-    } catch (error) {
-      next(error)
-    }
+UserRouter.route('/user').get(auth.verifyUser(), async (req, res, next) => {
+  try {
+    const userService = new UserService()
+
+    response({
+      error: false,
+      message: await userService.getAllUsers(),
+      res,
+      status: 200
+    })
+  } catch (error) {
+    next(error)
   }
-)
+})
 
-userRouter.route('/user/signup').post(
-  validatorCompiler(StoreuserSchema, 'body'),
+UserRouter.route('/user/signup').post(
+  validatorCompiler(storeUserSchema, 'body'),
   async (req, res, next) => {
     try {
       const {
-        body: { name, lastname, email, password }
+        body: { name, lastName, email, password }
       } = req
 
       response({
         error: false,
         message: await new UserService({
           name,
-          lastname,
+          lastName,
           email,
           password
         }).saveUser(),
@@ -47,79 +50,101 @@ userRouter.route('/user/signup').post(
   }
 )
 
-userRouter.route('/user/login').post(
+UserRouter.route('/user/login').post(
   validatorCompiler(userLoginSchema, 'body'),
-  auth.generateToken(),
+  auth.generateTokens(),
   async (req, res, next) => {
     try {
       const {
-        accesToken,
+        accessToken,
         refreshToken,
         body: { email, password }
       } = req
-
-      const isLoginCorrect = await new UserService({ email, password }).loginUser()
+      const isLoginCorrect = await new UserService({ email, password }).login()
 
       if (isLoginCorrect) {
-        response({
+        return response({
           error: false,
           message: {
-            accesToken,
+            accessToken,
             refreshToken
           },
           res,
           status: 200
         })
       }
+      throw new httpErrors.Unauthorized('You are not registered')
     } catch (error) {
       next(error)
     }
   }
 )
 
-userRouter.route('/user/:id')
+UserRouter.route('/user/:id')
   .get(
-    isAuthenticated,
-    validatorCompiler(userIdSchema, 'params'),
+    validatorCompiler(userIDSchema, 'params'),
+    auth.verifyIsCurrentUser(),
     async (req, res, next) => {
       try {
-        const { params: { id: userId } } = req
+        const {
+          params: { id: userId }
+        } = req
         const userService = new UserService({ userId })
 
-        response({ error: false, message: await userService.getUserById(), res, status: 200 })
+        response({
+          error: false,
+          message: await userService.getUserByID(),
+          res,
+          status: 200
+        })
       } catch (error) {
         next(error)
       }
     }
   )
+  .delete(validatorCompiler(userIDSchema, 'params'), async (req, res, next) => {
+    try {
+      const {
+        params: { id }
+      } = req
+      const userService = new UserService({ userId: id })
 
-  .delete(
-    isAuthenticated,
-    isAdmin,
-    validatorCompiler(userIdSchema, 'params'),
-    async (req, res, next) => {
-      try {
-        const { params: { id } } = req
-        const userService = new UserService({ userId: id })
-
-        response({ error: false, message: await userService.removeUserById(), res, status: 200 })
-      } catch (error) {
-        next(error)
-      }
+      response({
+        error: false,
+        message: await userService.removeUserByID(),
+        res,
+        status: 200
+      })
+    } catch (error) {
+      next(error)
     }
-  )
-
+  })
   .patch(
-    validatorCompiler(userIdSchema, 'params'),
-    validatorCompiler(UpdateUserSchema, 'body'),
+    validatorCompiler(userIDSchema, 'params'),
+    validatorCompiler(updateUserSchema, 'body'),
     async (req, res, next) => {
-      const { body: { name, lastname, email }, params: { id: userId } } = req
+      const {
+        body: { name, lastName, email, password },
+        params: { id: userId }
+      } = req
 
       try {
-        response({ error: false, message: await new UserService({ userId, name, lastname, email }).updateOneUser(), res, status: 200 })
+        response({
+          error: false,
+          message: await new UserService({
+            userId,
+            name,
+            lastName,
+            email,
+            password
+          }).updateOneUser(),
+          res,
+          status: 200
+        })
       } catch (error) {
         next(error)
       }
     }
   )
-module.exports = userRouter
+
+module.exports = UserRouter
