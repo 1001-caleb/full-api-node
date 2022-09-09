@@ -1,29 +1,44 @@
 const { UserService } = require('../src/expressExample/services')
 
 const users = []
-const roles = []
+const roles = [
+    {
+        _id: '1234',
+        id: '1',
+        name: 'admin',
+        description: 'system admin'
+    },
+    {
+        _id: '1235',
+        id: '2',
+        name: 'user',
+        description: 'user who can sell and buy articles'
+    }
+]
 const urls = []
 
 jest.mock('../src/expressExample/database/mongo/queries', () => {
     return {
         url: {
-            saveUrl: jest.fn( async url => urls.push(url)),
-            getOneUrl: jest.fn( async id => id.filter(url => url._id === id)),
+            saveUrl: jest.fn(async url => urls.push(url)),
+            getOneUrl: jest.fn(async id => urls.filter(url => url.id === id)),
         },
         user: {
-            saveUser: jest.fn( async user => users.push(user)),
-            getUserById: jest.fn( async id => users.filter(user => user._id === id)),
-            getAllUsers: jest.fn( async () => users),
-            removeUserById: jest.fn( async id => {
+            saveUser: jest.fn(async user => users.push(user)),
+            getUserById: jest.fn(async id => users.filter(user => user.id === id)),
+            getAllUsers: jest.fn(async () => users),
+            removeUserById: jest.fn(async id => {
                 const index = users.findIndex(user => user.id === id)
-                
+
+                if (index === -1) throw new Error('User not found')
+
                 const userToBeDeleted = users[index]
 
                 users.splice(index, 1)
             }),
-            updateOneUser: jest.fn( async user => {
-                const { id, name, lastname, email, password, salt, hash } = user
-                const index = users.findIndex(user => user._id === id)
+            updateOneUser: jest.fn(async user => {
+                const { id, name, lastname, email, salt, hash } = user
+                const index = users.findIndex(user => user.id === id)
 
                 if (index === -1) throw new Error('User not found')
 
@@ -43,8 +58,8 @@ jest.mock('../src/expressExample/database/mongo/queries', () => {
 
                 return usersUpdated
             }),
-            query: jest.fn( async query => {
-                const { id, name, lastname, email, password, salt, hash } = query
+            getOneUser: jest.fn(async query => {
+                const { id, name, lastname, email, salt, hash } = query
                 return users.find(user => {
                     let aux = true
 
@@ -52,7 +67,6 @@ jest.mock('../src/expressExample/database/mongo/queries', () => {
                     aux && name && (aux = aux && user.name === name)
                     aux && lastname && (aux = aux && user.lastname === lastname)
                     aux && email && (aux = aux && user.email === email)
-                    aux && password && (aux = aux && user.password === password)
                     aux && salt && (aux = aux && user.salt === salt)
                     aux && hash && (aux = aux && user.hash === hash)
 
@@ -60,23 +74,24 @@ jest.mock('../src/expressExample/database/mongo/queries', () => {
                 })[0]
             })
         },
-        roles: {
-            saveRole: jest.fn( async role => roles.push(role)),
-            getRoleById: jest.fn( async id => (roles = roles.filter(role => role._id === id))),
-            getRoleByName: jest.fn( async name => (roles = roles.filter(role => role.name === name))),
+        role: {
+            saveRole: jest.fn(async role => roles.push(role)),
+            getRoleById: jest.fn(async id => (roles.filter(role => role.id === id)[0])),
+            getRoleByName: jest.fn(async name => (roles.filter(role => role.name === name)[0])),
         }
     }
 })
 
 describe('Use cases from UserService', () => {
-    test('Add user ', async () => {
+    test('Add a user', async () => {
         const user = {
-            name: 'John',
-            lastname: 'Doe',
-            email: 'jhon@gmail.com'
+            name: 'Camilo',
+            lastName: 'Donoso',
+            email: 'cdonoso@gmail.com',
+            password: '123'
         }
 
-        await UserService.saveUser(user)
+        await new UserService(user).saveUser()
         expect(users.length).toBe(1)
     })
 
