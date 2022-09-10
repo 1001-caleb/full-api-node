@@ -8,12 +8,15 @@
     "express": "nodemon -r dotenv/config src/expressExample/index.js",
     "http": "nodemon -r dotenv/config src/httpExample/index.js",
     "lint": "npx eslint --fix ./src/expressExample",
-    "test": "jest -i"
+    "test": "jest -i",
+    "test:e2e": "NODE_ENV=local jest -i --testPathPattern=test/e2e"
   },
   "author": "1001-caleb",
   "license": "ISC",
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/jest": "^29.0.0",
+    "axios": "^0.27.2",
     "dotenv": "^16.0.1",
     "eslint": "^8.22.0",
     "eslint-config-standard": "^17.0.0",

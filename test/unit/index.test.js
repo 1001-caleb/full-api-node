@@ -1,4 +1,4 @@
-const { UserService } = require('../src/expressExample/services')
+const { UserService } = require('../../src/expressExample/services')
 
 const users = []
 const roles = [
