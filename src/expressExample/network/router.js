@@ -1,13 +1,14 @@
 const httperrors = require('http-errors')
 
-const { userRouter, urlRouter, articleRouter, roleRouter, response } = require('./routes')
-const routers = [userRouter, urlRouter, roleRouter, articleRouter]
+const { homeRouter, userRouter, urlRouter, articleRouter, roleRouter, response } = require('./routes')
+const routers = [ userRouter, urlRouter, roleRouter, articleRouter]
 
 /**
  * @param {import('express').Express} app
  *
 */
 const applyRoutes = (app) => {
+  app.use('/', homeRouter)
   routers.forEach(router => app.use('/api', router))
 
   app.use((req, res, next) => {

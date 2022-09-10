@@ -8,12 +8,15 @@
     "express": "nodemon -r dotenv/config src/expressExample/index.js",
     "http": "nodemon -r dotenv/config src/httpExample/index.js",
     "lint": "npx eslint --fix ./src/expressExample",
-    "test": "jest -i",
-    "test:e2e": "NODE_ENV=local jest -i --testPathPattern=test/e2e"
+    "test:ci": "NODE_ENV=ci jest --ci -i",
+    "test:local": "NODE_ENV=local jest -i",
+    "test:unit:local": "jest -i --testPathPattern=test/unit",
+    "test:e2e:local": "NODE_ENV=local jest -i --testPathPattern=test/e2e"
   },
   "author": "1001-caleb",
   "license": "ISC",
   "devDependencies": {
+    "@faker-js/faker": "^7.5.0",
     "@types/axios": "^0.14.0",
     "@types/jest": "^29.0.0",
     "axios": "^0.27.2",
