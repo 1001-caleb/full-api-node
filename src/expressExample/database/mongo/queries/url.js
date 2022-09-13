@@ -10,7 +10,9 @@ const { UrlModel } = require('../models')
 
 const saveUrl = async url => {
   const savedUrl = new UrlModel(url)
+
   await savedUrl.save()
+  
   return savedUrl
 }
 

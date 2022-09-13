@@ -27,7 +27,7 @@ const saveUser = async user => {
  * @returns found user
  */
 
-const getOneUser = async (id) => {
+const getUserById = async (id) => {
   const users = await UserModel.find({ id })
   return users[0]
 }
@@ -49,7 +49,7 @@ const getAllUsers = async => {
  * @returns delete a user
  */
 
-const removeOneUser = async (id) => {
+const removeUserById = async (id) => {
   const user = await UserModel.findOneAndRemove({ id })
 
   return user
@@ -91,7 +91,7 @@ const updateOneUser = async user => {
  * @param {Object} query - The query object that will be used to find the user.
  * @returns The first user in the database
  */
-const getUser = async (query = {}) => {
+const getOneUser = async (query = {}) => {
   const users = await UserModel.find(query)
 
   return users[0]
@@ -99,9 +99,9 @@ const getUser = async (query = {}) => {
 
 module.exports = {
   saveUser,
-  getOneUser,
-  removeOneUser,
+  getUserById,
+  removeUserById,
   getAllUsers,
   updateOneUser,
-  getUser
+  getOneUser
 }
