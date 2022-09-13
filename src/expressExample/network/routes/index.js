@@ -3,6 +3,6 @@ module.exports = {
   articleRouter: require('./article'),
   urlRouter: require('./url'),
   roleRouter: require('./role'),
-  response: require('./response'),
-  homeRouter: require('./home')
+  homeRouter: require('./home'),
+  response: require('./response')
 }

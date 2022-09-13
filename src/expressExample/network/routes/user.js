@@ -62,7 +62,7 @@ UserRouter.route('/user/login').post(
       } = req
       const isLoginCorrect = await new UserService({ email, password }).login()
 
-      if (isLoginCorrect) {
+      if (isLoginCorrect)
         return response({
           error: false,
           message: {
@@ -72,7 +72,7 @@ UserRouter.route('/user/login').post(
           res,
           status: 200
         })
-      }
+
       throw new httpErrors.Unauthorized('You are not registered')
     } catch (error) {
       next(error)
