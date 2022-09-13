@@ -1,65 +1,93 @@
-const httperrors = require('http-errors')
-const { mongo: { queries } } = require('../database')
-const { hash: { hashString } } = require('../utils')
-const { user: { getOneUser, saveUser, getAllUsers, removeOneUser, updateOneUser } } = queries
+const httpErrors = require('http-errors')
 const { nanoid } = require('nanoid')
+
 const RoleService = require('./role')
+const {
+  mongo: { queries }
+} = require('../database')
+const {
+  hash: { hashString }
+} = require('../utils')
+const {
+  user: {
+    getUserByID,
+    saveUser,
+    getAllUsers,
+    removeUserByID,
+    updateOneUser,
+    getOneUser
+  }
+} = queries
+
 class UserService {
   #userId
   #name
-  #lastname
+  #lastName
   #email
   #password
   #role
 
   /**
-     * @param {Object} args
-     * @param {string} args.userId
-     * @param {string} args.name
-     * @param {string} args.lastname
-     * @param {string} args.email
-     * @param {string} args.password
-     * @param {String} args.role
-    **/
-  constructor (args = {}) {
-    const { userId = '', name = '', lastname = '', email = '', password = '', role = '2' } = args
+   * @param {Object} args
+   * @param {String} args.userId
+   * @param {String} args.name
+   * @param {String} args.lastName
+   * @param {String} args.email
+   * @param {String} args.password
+   * @param {String} args.role
+   */
+  constructor(args = {}) {
+    const {
+      userId = '',
+      name = '',
+      lastName = '',
+      email = '',
+      password = '',
+      role = '2'
+    } = args
 
     this.#userId = userId
     this.#name = name
-    this.#lastname = lastname
+    this.#lastName = lastName
     this.#email = email
     this.#password = password
     this.#role = role
   }
 
-  async verifyUserExists () {
-    if (!this.#userId) throw new httperrors.BadRequest('Missing userId')
+  async verifyUserExists() {
+    if (!this.#userId)
+      throw new httpErrors.BadRequest('Missing required field: userId')
 
-    const user = await getOneUser(this.#userId)
+    const user = await getUserByID(this.#userId)
 
-    if (!user) throw new httperrors.NotFound('User not found')
+    if (!user) throw new httpErrors.NotFound('User not found')
 
     return user
   }
 
-  async saveUser () {
-    if (!this.#name) { throw new httperrors.BadRequest('Missing name') }
+  async saveUser() {
+    if (!this.#name)
+      throw new httpErrors.BadRequest('Missing required field: name')
 
-    if (!this.#lastname) { throw new httperrors.BadRequest('Missing lastname') }
+    if (!this.#lastName)
+      throw new httpErrors.BadRequest('Missing required field: lastName')
 
-    if (!this.#email) { throw new httperrors.BadRequest('Missing email') }
+    if (!this.#email)
+      throw new httpErrors.BadRequest('Missing required field: email')
 
-    if (!this.#password) { throw new httperrors.BadRequest('Missing password') }
+    if (!this.#password)
+      throw new httpErrors.BadRequest('Missing required field: password')
 
-    if (!this.#role) { throw new httperrors.BadRequest('Missing required field: role') }
+    if (!this.#role)
+      throw new httpErrors.BadRequest('Missing required field: role')
 
     const { salt, result: hash } = hashString(this.#password)
     const role = await new RoleService({ id: this.#role }).getRoleByID()
 
     await saveUser({
-      id: nanoid(6),
+      id: nanoid(),
       name: this.#name,
-      lastname: this.#lastname,
+      lastName: this.#lastName,
       email: this.#email,
       salt,
       hash,
@@ -69,31 +97,37 @@ class UserService {
     return await getAllUsers()
   }
 
-  async getUserById () {
-    if (!this.#userId) { throw new httperrors.BadRequest('Missing userId') }
+  async getUserByID() {
+    if (!this.#userId)
+      throw new httpErrors.BadRequest('Missing required field: userId')
 
-    const user = await getOneUser(this.#userId)
+    const user = await getUserByID(this.#userId)
 
-    if (!user) throw new httperrors.NotFound('User not found')
+    if (!user)
+      throw new httpErrors.NotFound('The requested user does not exists')
 
     return user
   }
 
-  async getAllUsers () {
+  async getAllUsers() {
     return await getAllUsers()
   }
 
-  async removeUserById () {
-    if (!this.#userId) { throw new httperrors.BadRequest('Missing userId') }
+  async removeUserByID() {
+    if (!this.#userId)
+      throw new httpErrors.BadRequest('Missing required field: userId')
 
-    const user = await removeOneUser(this.#userId)
-    if (!user) throw new httperrors.NotFound('User not found')
+    const user = await removeUserByID(this.#userId)
+
+    if (!user)
+      throw new httpErrors.NotFound('The requested user does not exists')
 
     return user
   }
 
-  async updateOneUser () {
-    if (!this.#userId) { throw new httperrors.BadRequest('Missing userId') }
+  async updateOneUser() {
+    if (!this.#userId)
+      throw new httpErrors.BadRequest('Missing required field: userId')
 
     const updatePassword = !!this.#password
     const aux = {}
@@ -108,25 +142,27 @@ class UserService {
     return await updateOneUser({
       id: this.#userId,
       name: this.#name,
-      lastname: this.#lastname,
+      lastName: this.#lastName,
       email: this.#email,
       ...aux
     })
   }
 
-  async login () {
-    if (!this.#email) { throw new httperrors.BadRequest('Missing required field: email') }
+  async login() {
+    if (!this.#email)
+      throw new httpErrors.BadRequest('Missing required field: email')
 
-    if (!this.#password) { throw new httperrors.BadRequest('Missing required field: password') }
+    if (!this.#password)
+      throw new httpErrors.BadRequest('Missing required field: password')
 
     const user = await getOneUser({ email: this.#email })
 
-    if (!user) throw new httperrors.BadRequest('Bad credentials')
+    if (!user) throw new httpErrors.BadRequest('Bad credentials')
 
     const { salt, hash } = user
     const { result } = hashString(this.#password, salt)
 
-    if (hash !== result) throw new httperrors.BadRequest('Bad credentials')
+    if (hash !== result) throw new httpErrors.BadRequest('Bad credentials')
 
     return user
   }

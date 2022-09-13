@@ -1,28 +1,26 @@
 const { Type } = require('@sinclair/typebox')
 
-const StoreuserSchema = Type.Object({
+const storeUserSchema = Type.Object({
   name: Type.String({ minLength: 2 }),
-  lastname: Type.String({ minLength: 2 }),
-  email: Type.String({
-    format: 'email'
-  }),
+  lastName: Type.String({ minLength: 2 }),
+  email: Type.String({ format: 'email' }),
   password: Type.String({ minLength: 8 })
 })
 
-const UpdateUserSchema = Type.Partial(StoreuserSchema)
+const updateUserSchema = Type.Partial(storeUserSchema)
+
+const userIDSchema = Type.Object({
+  id: Type.String({ minLength: 21, maxLength: 21 })
+})
 
 const userLoginSchema = Type.Object({
   email: Type.String({ format: 'email' }),
   password: Type.String({ minLength: 8 })
 })
 
-const userIdSchema = Type.Object({
-  id: Type.String({ minLength: 6, maxLength: 6 })
-})
-
 module.exports = {
-  userIdSchema,
-  StoreuserSchema,
-  UpdateUserSchema,
+  storeUserSchema,
+  updateUserSchema,
+  userIDSchema,
   userLoginSchema
 }

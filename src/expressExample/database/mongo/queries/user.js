@@ -27,7 +27,7 @@ const saveUser = async user => {
  * @returns found user
  */
 
-const getUserById = async (id) => {
+const getUserByID = async (id) => {
   const users = await UserModel.find({ id })
   return users[0]
 }
@@ -49,7 +49,7 @@ const getAllUsers = async => {
  * @returns delete a user
  */
 
-const removeUserById = async (id) => {
+const removeUserByID = async (id) => {
   const user = await UserModel.findOneAndRemove({ id })
 
   return user
@@ -99,8 +99,8 @@ const getOneUser = async (query = {}) => {
 
 module.exports = {
   saveUser,
-  getUserById,
-  removeUserById,
+  getUserByID,
+  removeUserByID,
   getAllUsers,
   updateOneUser,
   getOneUser
