@@ -1,5 +1,5 @@
-const Ajv = require('ajv')
 const httpErrors = require('http-errors')
+const Ajv = require('ajv')
 const addFormats = require('ajv-formats')
 
 const ajv = addFormats(
@@ -14,7 +14,6 @@ const ajv = addFormats(
   .addKeyword('modifier')
 
 /**
- *
  * @param {Object} schema
  * @param {'body'|'params'} value
  */
@@ -29,6 +28,7 @@ const validatorCompiler = (schema, value) => {
 
       return next(new httpErrors.UnprocessableEntity(errorMessage))
     }
+
     next()
   }
 }
