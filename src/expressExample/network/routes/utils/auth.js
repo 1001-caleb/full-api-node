@@ -55,10 +55,10 @@ const generateTokens = () => {
     } = req
 
     const payload = { email, password }
-    const accessToken = jwt.sign(payload, process.env.SECRET, {
+    const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: '10min'
     })
-    const refreshToken = jwt.sign(payload, process.env.SECRET, {
+    const refreshToken = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: '1h'
     })
 
@@ -75,7 +75,7 @@ const verifyUser = () => {
         headers: { authorization }
       } = req
       const token = getToken(authorization)
-      const payload = jwt.verify(token, process.env.SECRET)
+      const payload = jwt.verify(token, process.env.JWT_SECRET)
       const { email, password } = validateUserPayload(payload)
       const isLoginCorrect = Boolean(
         await new UserService({ email, password }).login()
@@ -98,7 +98,7 @@ const verifyIsCurrentUser = () => {
         headers: { authorization }
       } = req
       const token = getToken(authorization)
-      const payload = jwt.verify(token, process.env.SECRET)
+      const payload = jwt.verify(token, process.env.JWT_SECRET)
       const { email, password } = validateUserPayload(payload)
       const user = await new UserService({ email, password }).login()
       const isLoginCorrect = Boolean(user)
@@ -120,7 +120,7 @@ const refreshAccessToken = () => {
         headers: { authorization }
       } = req
       const token = getToken(authorization)
-      const payload = jwt.verify(token, process.env.SECRET)
+      const payload = jwt.verify(token, process.env.JWT_SECRET)
       const { email, password } = validateUserPayload(payload)
       const user = await new UserService({ email, password }).login()
       const isLoginCorrect = Boolean(user)
@@ -128,7 +128,7 @@ const refreshAccessToken = () => {
       if (!(isLoginCorrect && user.id === userId))
         throw new httpErrors.Unauthorized(NOT_ALLOWED_TO_BE_HERE)
 
-      const accessToken = jwt.sign({ email, password }, process.env.SECRET, {
+      const accessToken = jwt.sign({ email, password }, process.env.JWT_SECRET, {
         expiresIn: '10min'
       })
 
