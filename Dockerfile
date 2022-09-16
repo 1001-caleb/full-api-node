@@ -4,8 +4,6 @@ WORKDIR /app
 
 COPY . ./
 
-RUN npm ci
-
-EXPOSE 2000
+RUN npm ci --omit=dev
 
 CMD [ "npm", "run", "service" ]
