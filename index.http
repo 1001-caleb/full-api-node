@@ -1,6 +1,6 @@
 ### Get all user
 GET http://localhost:2000/api/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx1aXMuYXJkaWxhQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoic2Fsa2Zqc2RsYWtqZmxkYXM7amZkbHNhZml1aGV3aXJmaCIsImlhdCI6MTY2MjUwOTc2OCwiZXhwIjoxNjYyNTEwMzY4fQ._frbtMMA6hHmHfaxq6boAZNCgw8wEPKSxzZ-E2cgzfY
+Authorization: Bearer 7fdbbd7ca273b2d4f02ab0474e42be1f3ba5135b5469e8f8556988a48cd1b4f9
 
 ### Get one user
 GET http://localhost:2000/api/user/x5kUjzl8T4TtQ1oE84vOB
@@ -11,10 +11,10 @@ POST http://localhost:2000/api/user/signup
 Content-Type: application/json
 
 {
-  "name": "Luis",
-  "lastName": "Ardila",
-  "email": "luis.ardila@gmail.com",
-  "password": "salkfjsdlakjfldas;jfdlsafiuhewirfh"
+  "name": "Doki",
+  "lastName": "Firu",
+  "email": "doki.firu@gmail.com",
+  "password": "1234555667h7"
 }
 
 ### Delete a user by id
